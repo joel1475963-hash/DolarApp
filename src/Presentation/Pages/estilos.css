@@ -1,0 +1,268 @@
+/* 1. Variables Globales (Asegúrate de que estas existan) */
+:root {
+  --primary-color: #1a3a5f;    /* Azul Marino Corporativo */
+  --secondary-color: #f8fafc;  /* Fondo Gris Azulado muy tenue */
+  --accent-color: #2a9d8f;     /* Verde Esmeralda para acciones positivas */
+  --text-main: #2d3748;        /* Gris Oscuro para texto */
+  --text-muted: #718096;       /* Gris para subtítulos */
+  --white: #ffffff;
+  --border-radius: 8px;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* 2. Estructura Principal */
+.admin-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.admin-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* 3. Sidebar (Navegación Lateral) */
+.sidebar {
+  width: 260px;
+  background-color: var(--primary-color);
+  display: flex;
+  flex-direction: column;
+  padding-top: 10px;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.sidebar button {
+  background: none;
+  border: none;
+  color: #cbd5e0;
+  padding: 16px 24px;
+  text-align: left;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar button:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.sidebar button.active {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border-left: 4px solid var(--accent-color);
+  font-weight: 600;
+}
+
+/* 4. Área de Contenido */
+.content-area {
+  flex: 1;
+  padding: 30px;
+  background-color: var(--secondary-color);
+  overflow-y: auto;
+}
+
+.admin-content {
+  background: var(--white);
+  padding: 24px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  border: 1px solid #e2e8f0;
+}
+
+.admin-content h3 {
+  margin-top: 0;
+  color: var(--primary-color);
+  font-size: 1.25rem;
+  border-bottom: 2px solid var(--secondary-color);
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+
+/* 5. Estilos de la Tabla (CRÍTICO para ver los datos) */
+.tabla-empresarial {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.tabla-empresarial th {
+  background-color: #f1f5f9;
+  color: var(--primary-color);
+  font-weight: 600;
+  text-align: left;
+  padding: 12px 15px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.tabla-empresarial td {
+  padding: 14px 15px;
+  border-bottom: 1px solid #edf2f7;
+  color: var(--text-main);
+  font-size: 0.95rem;
+}
+
+.tabla-empresarial tr:hover {
+  background-color: #f8fafc;
+}
+
+.valor-destacado {
+  font-weight: 700;
+  color: var(--accent-color);
+}
+
+/* 6. Botones de Acción */
+.btn-refresh {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.btn-refresh:active { transform: scale(0.98); }
+
+.btn-edit {
+  background-color: #edf2f7;
+  color: var(--primary-color);
+  border: 1px solid #cbd5e0;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.btn-edit:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* 7. Navbar Superior */
+.navbar {
+  background: var(--white);
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Fondo oscuro transparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 400px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.modal-content h3 { color: var(--primary-color); margin-bottom: 20px; }
+
+.modal-content input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0 20px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.btn-save {
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 800px;
+  margin-top: 30px;
+}
+
+.main-btn {
+  padding: 30px !important;
+  font-size: 1.1rem !important;
+  height: 100%;
+}
+
+.content-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 10px;
+}
+.form-container {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.oferta-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  text-align: left;
+}
+
+.oferta-form label {
+  font-weight: bold;
+  color: #333;
+}
+
+.oferta-form input, .oferta-form select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.btn-cancel {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-cancel:hover { background: #c0392b; }
