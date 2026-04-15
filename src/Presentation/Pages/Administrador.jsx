@@ -1,6 +1,13 @@
-//Aqui esta el Frontend la parte visual de Administrador
+//Esta es la vista de administracion
 import React, { useState } from 'react';
 import { VisualizarTipoCambio } from './VisualizarTipoCambio';
+import { GestionarUsuarios } from './GestionarUsuarios';
+import { InicioAdministracion } from './InicioAdministracion';
+
+import { VisualizarOfertas } from './VisualizarOfertas'; 
+import { PublicarOferta } from './PublicarOferta';
+import { VerMisOfertas } from './VerMisOfertas';
+
 import './estilos.css';
 
 export const Administrador = ({ user, onLogout }) => {
@@ -8,22 +15,28 @@ export const Administrador = ({ user, onLogout }) => {
 
   const renderContenido = () => {
     switch (vista) {
-      case 'usuarios':
+      case 'inicio':
         return (
-          <section className="admin-content">
-            <h3>Lista de Usuarios Registrados</h3>
-            <p>Cargando tabla de usuarios desde MySQL...</p>
-          </section>
+          <InicioAdministracion 
+            alVerOfertas={() => setVista('verOfertas')} 
+            alPublicar={() => setVista('publicar')} 
+            alVerMisOfertas={() => setVista('misOfertas')}
+          />
         );
+      case 'usuarios':
+        return <GestionarUsuarios />;
       case 'cambio':
         return <VisualizarTipoCambio />;
+      
+      case 'verOfertas':
+        return <VisualizarOfertas onVolver={() => setVista('inicio')} />;
+      case 'publicar':
+        return <PublicarOferta user={user} onVolver={() => setVista('inicio')} />;
+      case 'misOfertas':
+        return <VerMisOfertas user={user} onVolver={() => setVista('inicio')} />;
+
       default:
-        return (
-          <section className="admin-stats">
-            <div className="card">Usuarios Activos: 10</div>
-            <div className="card">Ofertas Hoy: 5</div>
-          </section>
-        );
+        return null; // O una vista por defecto
     }
   };
 

@@ -35,3 +35,27 @@ export const registrarNuevoUsuario = async (datos) => {
         return { error: "Error de red al registrar" };
     }
 };
+export const obtenerTodosLosUsuarios = async () => {
+    const res = await fetch(`${API_URL}/api.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ accion: 'obtener_usuarios' })
+    });
+    return await res.json();
+};
+export const actualizarUsuario = async (usuario) => {
+    const res = await fetch(`${API_URL}/api.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ accion: 'actualizarUsuario', ...usuario })
+    });
+    return await res.json();
+};
+export const eliminarUsuario = async (id) => {
+    const res = await fetch(`${API_URL}/api.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ accion: 'eliminarUsuario', id })
+    });
+    return await res.json();
+};
