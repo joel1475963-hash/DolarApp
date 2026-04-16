@@ -60,7 +60,7 @@ export const VisualizarTipoCambio = () => {
   };
 
   return (
-    <section className="admin-content">
+    <section >
       <div className="content-header">
         <h3>Gestión de Tipo de Cambio</h3>
         <div>

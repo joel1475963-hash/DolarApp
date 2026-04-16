@@ -1,61 +1,59 @@
 import { API_URL } from './conexion';
 
-//Esta es la consulta de Usuarios 
-
-export const buscarUsuarioPorCredenciales = async (username, password) => {
-    try {
-        const response = await fetch(`${API_URL}/api.php`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                accion: 'login',
-                nombreU: username, 
-                contrasena: password 
-            })
-        });
-        const data = await response.json();
-        
-        return data;
-    } catch (error) {
-        console.error("Error en login:", error);
-        return { error: "No se pudo conectar con el servidor" };
+class ConsultaUsuarios {
+    constructor() {
+        this.url = `${API_URL}/api.php`;
+        this.headers = { 'Content-Type': 'application/json' };
     }
-};
 
-export const registrarNuevoUsuario = async (datos) => {
-    try {
-        const response = await fetch(`${API_URL}/api.php`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ accion: 'registrar', ...datos })
-        });
-        return await response.json();
-    } catch (error) {
-        console.error("Error en registro:", error);
-        return { error: "Error de red al registrar" };
+    // Método privado para evitar repetir código en cada fetch
+    async #peticion(body) {
+        try {
+            const response = await fetch(this.url, {
+                method: 'POST',
+                headers: this.headers,
+                body: JSON.stringify(body)
+            });
+            return await response.json();
+        } catch (error) {
+            console.error(`Error en la acción ${body.accion}:`, error);
+            return { error: "No se pudo conectar con el servidor" };
+        }
     }
-};
-export const obtenerTodosLosUsuarios = async () => {
-    const res = await fetch(`${API_URL}/api.php`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ accion: 'obtener_usuarios' })
-    });
-    return await res.json();
-};
-export const actualizarUsuario = async (usuario) => {
-    const res = await fetch(`${API_URL}/api.php`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ accion: 'actualizarUsuario', ...usuario })
-    });
-    return await res.json();
-};
-export const eliminarUsuario = async (id) => {
-    const res = await fetch(`${API_URL}/api.php`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ accion: 'eliminarUsuario', id })
-    });
-    return await res.json();
-};
+
+    async login(username, password) {
+        return await this.#peticion({
+            accion: 'login',
+            nombreU: username,
+            contrasena: password
+        });
+    }
+
+    async registrar(datos) {
+        return await this.#peticion({ accion: 'registrar', ...datos });
+    }
+
+    async obtenerTodos() {
+        return await this.#peticion({ accion: 'obtener_usuarios' });
+    }
+
+    async actualizar(usuario) {
+        return await this.#peticion({ accion: 'actualizarUsuario', ...usuario });
+    }
+
+    async eliminar(id) {
+        return await this.#peticion({ accion: 'eliminarUsuario', id });
+    }
+
+    async verificarDuplicado(valor) {
+        try {
+            // Enviamos el CI por la URL (GET)
+            const response = await fetch(`${this.url}?accion=verificar&ci=${valor}`);
+            const data = await response.json();
+            return data.existe; // Retorna true o false
+        } catch (error) {
+            return false;
+        }
+    }
+}
+export const consultaUsuarios = new ConsultaUsuarios();

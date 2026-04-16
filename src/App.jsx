@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import './App.css';
 import { Administrador } from './Presentation/Pages/Administrador';
-import { buscarUsuarioPorCredenciales } from './Data/consultaUsuarios';
+// Cambiamos la función suelta por la instancia de la clase
+import { consultaUsuarios } from './Data/consultaUsuarios';
 import { Registrarse } from './Presentation/Pages/Registrarse';
 import { Usuario } from './Presentation/Pages/Usuario';
 
@@ -14,29 +15,33 @@ function App() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const data = await buscarUsuarioPorCredenciales(credentials.nombreU, credentials.contrasena);
+
+    // Llamamos al método login de la clase
+    const data = await consultaUsuarios.login(credentials.nombreU, credentials.contrasena);
+    
     setLoading(false);
 
     if (data && !data.error) {
       setUser(data);
     } else {
-      alert("Error: Usuario o contraseña incorrectos");
+      // Usamos el error que viene de la API si existe, si no, el mensaje genérico
+      alert(data.error || "Error: Usuario o contraseña incorrectos");
     }
   };
 
   const logout = () => {
     setUser(null);
     setEsRegistro(false);
+    // Opcional: limpiar credenciales al salir
+    setCredentials({ nombreU: '', contrasena: '' });
   };
 
-  // --- LOGICA DE VISTAS PARA USUARIOS NO AUTENTICADOS ---
+  // --- LÓGICA DE VISTAS PARA USUARIOS NO AUTENTICADOS ---
   if (!user) {
-    // Si el usuario hizo clic en "Registrarse", mostramos esa página
     if (esRegistro) {
       return <Registrarse onVolver={() => setEsRegistro(false)} />;
     }
 
-    // Por defecto mostramos el Login
     return (
       <div className="login-screen">
         <form onSubmit={handleLogin} className="login-card">
@@ -67,14 +72,17 @@ function App() {
     );
   }
 
-  // --- REDIRECCIÓN SEGÚN ROL ---
+
   if (user.rol === 'Administrador') {
     return <Administrador user={user} onLogout={logout} />;
   }
+  
   if (user.rol === 'Usuario') {
     return <Usuario user={user} onLogout={logout} />;
   }
 
+
+  return <div>Error: Rol no reconocido. Contacte al administrador.</div>;
 }
 
 export default App;
