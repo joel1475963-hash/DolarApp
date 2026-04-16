@@ -54,7 +54,7 @@ export const Administrador = ({ user, onLogout }) => {
         <aside className="sidebar">
           <button className={vista === 'inicio' ? 'active' : ''} onClick={() => setVista('inicio')}>Inicio</button>
           <button className={vista === 'usuarios' ? 'active' : ''} onClick={() => setVista('usuarios')}>Ver Usuarios</button>
-          <button className={vista === 'cambio' ? 'active' : ''} onClick={() => setVista('cambio')}>Consultar Cambio</button>
+          <button className={vista === 'cambio' ? 'active' : ''} onClick={() => setVista('cambio')}>Gestionar Cambio</button>
         </aside>
 
         <main className="content-area">
